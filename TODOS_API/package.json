@@ -1,0 +1,23 @@
+{
+  "name": "todos",
+  "version": "1.0.0",
+  "description": "a todo api that has get post put and delete method",
+  "homepage": "https://github.com/YbencheL/Multi-Container#readme",
+  "bugs": {
+    "url": "https://github.com/YbencheL/Multi-Container/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/YbencheL/Multi-Container.git"
+  },
+  "license": "ISC",
+  "author": "yassine benchelh",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodeman server.js"
+  },
+  "dependencies": {
+    "morgan": "^1.10.1"
+  }
+}
