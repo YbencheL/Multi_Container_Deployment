@@ -1,8 +1,4 @@
 DockerContainers/API/secrets
 Ansible/group_vars
 # Terraform
-Terraform/.terraform/
-Terraform/*.tfstate
-Terraform/*.tfstate.*
-Terraform/*.tfvars
-Terraform/*.tfvars.json
+Terraform/.terraform
