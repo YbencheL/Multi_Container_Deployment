@@ -1,2 +1,9 @@
 DockerContainers/API/secrets
 Ansible/group_vars
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.*
+**/*.tfvars
+**/*.tfvars.json
+crash.log
