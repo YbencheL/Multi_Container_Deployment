@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Todo API Test Console</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <div>
+          <p class="eyebrow">Todo API</p>
+          <h1>Static test console</h1>
+          <p class="subtitle">Open this page from your server and click the links below to verify the API.</p>
+        </div>
+        <div class="hero-card">
+          <p class="label">Base URL</p>
+          <p class="value">http://&lt;server-ip&gt;:3000</p>
+        </div>
+      </header>
+
+      <section class="grid">
+        <article class="card">
+          <h2>Quick check</h2>
+          <ol>
+            <li>Replace <strong>&lt;server-ip&gt;</strong> in the links below.</li>
+            <li>Open <strong>/todos</strong> and confirm JSON is returned.</li>
+            <li>Use the curl samples to create and update todos.</li>
+          </ol>
+        </article>
+        <article class="card">
+          <h2>Endpoints</h2>
+          <ul class="endpoint">
+            <li><span class="method get">GET</span> /todos</li>
+            <li><span class="method post">POST</span> /todos</li>
+            <li><span class="method get">GET</span> /todos/:id</li>
+            <li><span class="method put">PUT</span> /todos/:id</li>
+            <li><span class="method del">DELETE</span> /todos/:id</li>
+          </ul>
+        </article>
+        <article class="card">
+          <h2>Open in browser</h2>
+          <p class="muted">Update the server IP before clicking.</p>
+          <div class="links">
+            <a href="http://<server-ip>:3000/todos" target="_blank" rel="noreferrer">Open /todos</a>
+            <a href="http://<server-ip>:3000/todos/<id>" target="_blank" rel="noreferrer">Open /todos/:id</a>
+          </div>
+        </article>
+      </section>
+
+      <section class="card wide">
+        <h2>Payload shape</h2>
+        <pre><code>{
+  "title": "Ship new API",
+  "description": "Add UI test page",
+  "priority": "medium",
+  "completed": false
+}
+</code></pre>
+      </section>
+
+      <section class="card wide">
+        <h2>Sample requests</h2>
+        <div class="samples">
+          <div>
+            <h3>Create</h3>
+            <pre><code>curl -X POST http://&lt;server-ip&gt;:3000/todos \
+  -H "Content-Type: application/json" \
+  -d '{"title":"First todo","description":"Test from curl","priority":"high"}'
+</code></pre>
+          </div>
+          <div>
+            <h3>List</h3>
+            <pre><code>curl http://&lt;server-ip&gt;:3000/todos
+</code></pre>
+          </div>
+          <div>
+            <h3>Update</h3>
+            <pre><code>curl -X PUT http://&lt;server-ip&gt;:3000/todos/&lt;id&gt; \
+  -H "Content-Type: application/json" \
+  -d '{"completed":true}'
+</code></pre>
+          </div>
+          <div>
+            <h3>Delete</h3>
+            <pre><code>curl -X DELETE http://&lt;server-ip&gt;:3000/todos/&lt;id&gt;
+</code></pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="note">
+        <h2>Expected response</h2>
+        <pre><code>{
+  "status": "success",
+  "data": {
+    "todos": [
+      {
+        "_id": "64f...",
+        "title": "First todo",
+        "description": "Test from curl",
+        "priority": "high",
+        "completed": false
+      }
+    ]
+  }
+}
+</code></pre>
+      </section>
+    </main>
+  </body>
+</html>
