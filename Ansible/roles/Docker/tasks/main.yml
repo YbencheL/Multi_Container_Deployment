@@ -1,0 +1,44 @@
+- name: Installing docker
+  ansible.builtin.shell: |
+    set -e
+    sudo apt update
+    sudo mkdir -p /home/adminuser/data/mongodb
+    sudo apt install ca-certificates curl
+    sudo install -m 0755 -d /etc/apt/keyrings
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+    sudo chmod a+r /etc/apt/keyrings/docker.asc
+    sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+    Types: deb
+    URIs: https://download.docker.com/linux/ubuntu
+    Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+    Components: stable
+    Architectures: $(dpkg --print-architecture)
+    Signed-By: /etc/apt/keyrings/docker.asc
+    EOF
+    sudo apt update
+
+- name: Docker login
+  community.docker.docker_login:
+    username: "{{ USERNAME }}"
+    password: "{{ DOCKER_TOKEN }}"
+
+- name: Copying Docker compose file
+  ansible.builtin.copy:
+    src: ./../docker-compose.yml
+    dest: /home/adminuser/multi-container
+    force: yes
+
+
+- name: Copying secrets folder
+  ansible.builtin.copy:
+    src: ./../DockerContainers/API/secrets
+    dest: /home/adminuser/multi-container/DockerContainers/API
+    force: yes
+
+- name: Start app with Compose
+  community.docker.docker_compose_v2:
+    project_src: /home/adminuser/multi-container
+    state: present
+    wait: false
+  environment:
+    MONGO_DATA_PATH: /home/adminuser/data/mongodb

@@ -1,0 +1,5 @@
+- hosts: MultyContainer
+  become: true
+  roles:
+    - role: Docker
+      tags: Docker
