@@ -1,0 +1,64 @@
+services:
+
+  api:
+    build:  API/.
+    image: api:my_api
+    ports:
+      - 3000:3000
+    container_name: api
+    secrets:
+      - PORT
+      - DATABASE
+      - DATABASE_PASSWORD
+    user: 1000:1000
+    networks:
+      nodeJsAPI:
+    depends_on:
+      - mongodb
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/todos"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+  
+  mongodb:
+    build: MONGODB/.
+    image: mongodb:my_mongodb
+    ports:
+      - 27018:27017
+    container_name: mongodb
+    networks:
+      nodeJsAPI:
+    volumes:
+      - mongodb:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "'db.adminCommand('ping').ok'"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+
+networks:
+  nodeJsAPI:
+
+secrets:
+
+  PORT:
+    file: ./API/secrets/PORT.txt
+  DATABASE:
+    file: ./API/secrets/DATABASE.txt
+  DATABASE_PASSWORD:
+    file: ./API/secrets/DATABASE_PASSWORD.txt
+
+volumes:
+
+  mongodb:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/yassine/data/mongodb'

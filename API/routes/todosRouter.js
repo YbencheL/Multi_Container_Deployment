@@ -1,9 +1,9 @@
 const express = require('express');
-const todosController = require('./../controllers/todosController');
+const todosController = require('../controllers/todosController');
 
 const router = express.Router();
 
-router.param('id', todosController.checkId);
+// router.param('id', todosController.checkId);
 
 router.route('/')
      .get(todosController.getAlltodos)
