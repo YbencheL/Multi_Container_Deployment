@@ -194,9 +194,9 @@ Once deployed to the remote server, use `make remote-stop` to cleanly shut down 
 - For getting all todos or creating a new one elements ```http://<YOUR_SERVERS_IP>:<PORT>/todos```.
 - FOR getting a specific element or updating one ```http://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>```.
 
-*You can get an id of a todo by using GET to see all available todos in the Database*.
-*Additionally you can access  ```https://<YOUR_SERVERS_IP>:<PORT>/todos``` to see all todos in the database,
-Or ```https://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>``` to look for a specific ID*.
+*You can get an id of a todo by using GET to see all available todos in the Database, Additionally you can access
+```https://<YOUR_SERVERS_IP>:<PORT>/todos``` to see all todos in the database, Or 
+```https://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>``` to look for a specific ID*.
 
 ---
 
