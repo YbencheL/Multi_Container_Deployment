@@ -17,6 +17,7 @@ Automated deployment for a todo application using Docker, Ansible, and Terraform
 5. [Configuration](#configuration)
 6. [Terraform Tutorial](#terraform-tutorial)
 7. [Operations](#operations)
+8. [API Testing](#api-testing)
 8. [Troubleshooting](#troubleshooting)
 9. [Notes](#notes)
 
@@ -179,6 +180,17 @@ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 ### Managing the Remote Stack
 
 Once deployed to the remote server, use `make remote-stop` to cleanly shut down all containers on the target server from your control machine. This runs the Ansible deployment playbook with the `--tags stop` flag, which stops the Docker Compose stack remotely.
+
+---
+
+---
+
+## API Testing
+
+*To test all the CRUD operation i recomment using postman with the following urls*:
+
+- For getting all todos or creating a new one elements http://<YOU_SERVERS_IP>:<PORT>/todos .
+- FOR getting a specific element or updating one http://<YOU_SERVERS_IP>:<PORT>/todos/id (you can get an id of a todo by using GET to see all available todos in the Database).
 
 ---
 
