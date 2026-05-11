@@ -18,8 +18,8 @@ Automated deployment for a todo application using Docker, Ansible, and Terraform
 6. [Terraform Tutorial](#terraform-tutorial)
 7. [Operations](#operations)
 8. [API Testing](#api-testing)
-8. [Troubleshooting](#troubleshooting)
-9. [Notes](#notes)
+9. [Troubleshooting](#troubleshooting)
+10. [Notes](#notes)
 
 ---
 
