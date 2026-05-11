@@ -12,7 +12,7 @@ ANSIBLE_INVENTORY ?= Ansible/inventory.ini
 
 .PHONY: build build-images push deploy up down logs create-volumes start stop remote-stop
 
-build: create-volumes build-images push deploy
+build: deploy
 
 create-volumes:
 	mkdir -p /home/$(USER)/data/nginx

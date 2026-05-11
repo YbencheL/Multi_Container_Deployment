@@ -1,7 +1,7 @@
 services:
 
   api:
-    build:  ./DockerContainers/API
+    # build:  ./DockerContainers/API
     image: yass555/todo-api:1.1
     ports:
       - 3000:3000
@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
   
   mongodb:
-    build: ./DockerContainers/MONGODB
+    # build: ./DockerContainers/MONGODB
     image: yass555/todo-mongodb:1.1
     ports:
       - 27018:27017
@@ -42,7 +42,7 @@ services:
     restart: unless-stopped
 
   nginx:
-    build: ./DockerContainers/NGINX
+    # build: ./DockerContainers/NGINX
     image: yass555/todo-nginx:1.1
     ports:
       - 443:443

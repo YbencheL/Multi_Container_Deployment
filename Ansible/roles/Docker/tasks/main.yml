@@ -24,9 +24,15 @@
     username: "{{ USERNAME }}"
     password: "{{ DOCKER_TOKEN }}"
 
-- name: Copying Docker compose file
-  ansible.builtin.copy:
-    src: ./../DockerContainers/docker-compose.yml
+# - name: Copying Docker compose file
+#   ansible.builtin.copy:
+#     src: ./../DockerContainers/docker-compose.yml
+#     dest: /home/adminuser/multi-container
+#     force: yes
+
+- name: Generate docker-compose file from template
+  ansible.builtin.template:
+    src: ./../files/docker-compose.yml.j2
     dest: /home/adminuser/multi-container
     force: yes
 
@@ -46,6 +52,8 @@
   environment:
     MONGO_DATA_PATH: /home/adminuser/data/mongodb
     NGINX_DATA_PATH: /home/adminuser/data/nginx
+
+
 
 - name: Force stop all containers
   shell: "docker stop $(docker ps -q)"
