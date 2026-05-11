@@ -138,7 +138,7 @@ This checks that your Terraform files are syntactically valid before you try to 
 ### 4. Review the Plan
 
 ```bash
-terraform plan -out=tfplan
+terraform plan
 ```
 
 Read the output carefully so you know exactly what Azure resources will be created, changed, or deleted.
@@ -146,7 +146,7 @@ Read the output carefully so you know exactly what Azure resources will be creat
 ### 5. Apply the Infrastructure
 
 ```bash
-terraform apply tfplan
+terraform apply
 ```
 
 If you did not save a plan file, you can also run `terraform apply` directly, but using a saved plan is safer.
