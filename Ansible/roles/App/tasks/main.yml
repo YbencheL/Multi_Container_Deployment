@@ -1,4 +1,5 @@
 - name: Copy tarball file
   ansible.builtin.copy:
-    src: ./../files/todo-api
-    dest: /home/adminuser/data/nginx/todo-api
+    src: ./../files/blue
+    dest: /home/adminuser/data/nginx/
+    force: yes

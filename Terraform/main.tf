@@ -24,6 +24,7 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
+# Manages a virtual network including any configured subnets
 resource "azurerm_virtual_network" "vn" {
   name                = "Multi-container-network"
   resource_group_name = azurerm_resource_group.rg.name
@@ -37,6 +38,9 @@ resource "azurerm_virtual_network" "vn" {
   }
 }
 
+/* Manages a subnet. Subnets represent network segments within 
+the IP space defined by the virtual network.
+*/
 resource "azurerm_subnet" "subnet" {
   name                 = "Multi-container-subnet"
   resource_group_name  = azurerm_resource_group.rg.name
@@ -44,6 +48,7 @@ resource "azurerm_subnet" "subnet" {
   address_prefixes     = ["10.123.1.0/24"]
 }
 
+# Manages a network security group that contains a list of network security rules.
 resource "azurerm_network_security_group" "sg" {
   name                = "Multi-container-sg"
   location            = azurerm_resource_group.rg.location
@@ -56,6 +61,7 @@ resource "azurerm_network_security_group" "sg" {
   }
 }
 
+# Manages a Network Security Rule.
 resource "azurerm_network_security_rule" "rule" {
   name                        = "Multi-container-rule"
   priority                    = 100
@@ -70,11 +76,13 @@ resource "azurerm_network_security_rule" "rule" {
   network_security_group_name = azurerm_network_security_group.sg.name
 }
 
+# Associates a Network Security Group with a Subnet within a Virtual Network.
 resource "azurerm_subnet_network_security_group_association" "sga" {
   subnet_id                 = azurerm_subnet.subnet.id
   network_security_group_id = azurerm_network_security_group.sg.id
 }
 
+# Manages a Public IP Address.
 resource "azurerm_public_ip" "ip" {
   name                = "Multi-container-ip"
   resource_group_name = azurerm_resource_group.rg.name
@@ -89,6 +97,7 @@ resource "azurerm_public_ip" "ip" {
   }
 }
 
+# Manages a Network Interface.
 resource "azurerm_network_interface" "nic" {
   name                = "nic"
   location            = azurerm_resource_group.rg.location
@@ -108,6 +117,7 @@ resource "azurerm_network_interface" "nic" {
   }
 }
 
+# Manages a Linux Virtual Machine.
 resource "azurerm_linux_virtual_machine" "vm" {
   name                = "Multy-continer-vm"
   resource_group_name = azurerm_resource_group.rg.name

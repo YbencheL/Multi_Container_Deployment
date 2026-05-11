@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Todo API — Test Console</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="wrap">
+    <header class="header">
+      <div class="header-content">
+        <h1 class="title">Todo API</h1>
+        <p class="subtitle">Test console for CRUD operations</p>
+      </div>
+    </header>
+
+    <section class="tutorial">
+      <div class="section-header">
+        <h2>How to Test CRUD</h2>
+        <p>Use curl from your terminal to test API endpoints</p>
+      </div>
+      <ul class="tutorial-list">
+        <li>
+          <span class="op">List all</span>
+          <code>curl http://localhost:3000/todos</code>
+        </li>
+        <li>
+          <span class="op">Create</span>
+          <code>curl -X POST http://localhost:3000/todos -H "Content-Type: application/json" -d '{"title":"My task","description":"Details","priority":"high"}'</code>
+        </li>
+        <li>
+          <span class="op">Update</span>
+          <code>curl -X PUT http://localhost:3000/todos/ID -H "Content-Type: application/json" -d '{"completed":true}'</code>
+        </li>
+        <li>
+          <span class="op">Delete</span>
+          <code>curl -X DELETE http://localhost:3000/todos/ID</code>
+        </li>
+      </ul>
+    </section>
+
+    <section class="controls-section">
+      <div class="control-group">
+        <label for="base" class="control-label">API Base URL</label>
+        <input id="base" class="control-input" placeholder="e.g., http://192.168.1.100:3000" value="http://localhost:3000" />
+      </div>
+      <div class="control-group">
+        <label for="todoId" class="control-label">Todo ID (optional)</label>
+        <input id="todoId" class="control-input" placeholder="Leave empty for all todos" />
+      </div>
+      <button id="fetchBtn" class="btn-primary">Fetch</button>
+    </section>
+
+    <section class="result-section">
+      <div class="section-header">
+        <h2>Result</h2>
+        <p>Response from GET /todos</p>
+      </div>
+      <div class="result-panel">
+        <pre id="output" class="result-output">Click "Fetch todos" to load data...</pre>
+      </div>
+      <div id="status" class="status-msg"></div>
+    </section>
+
+    <footer class="footer">All requests are made from the browser. No server-side changes required.</footer>
+  </main>
+
+  <script>
+    const btn = document.getElementById('fetchBtn');
+    const output = document.getElementById('output');
+    const status = document.getElementById('status');
+    const baseInput = document.getElementById('base');
+    const todoIdInput = document.getElementById('todoId');
+
+    // Get the current origin (protocol + host)
+    const defaultBase = '';
+
+    function formatJSON(data) {
+      return JSON.stringify(data, null, 2);
+    }
+
+    btn.addEventListener('click', async () => {
+      output.textContent = 'Loading...';
+      status.textContent = '';
+      status.className = 'status-msg';
+
+      const baseUrl = baseInput.value.trim() || defaultBase;
+      const todoId = todoIdInput.value.trim();
+      const cleanBase = baseUrl.replace(/\/+$/, '');
+      const url = todoId
+        ? (cleanBase ? cleanBase + '/todos/' + todoId : '/todos/' + todoId)
+        : (cleanBase ? cleanBase + '/todos' : '/todos');
+
+      try {
+        const response = await fetch(url, {
+          method: 'GET',
+          headers: { 'Accept': 'application/json' },
+          cache: 'no-store'
+        });
+
+        const responseText = await response.text();
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+
+        let json;
+        try {
+          json = JSON.parse(responseText);
+        } catch (e) {
+          throw new Error('Invalid JSON response: ' + e.message);
+        }
+
+        output.textContent = formatJSON(json);
+        
+        let message = '✓ Success';
+        if (todoId) {
+          message += ` - Fetched todo: ${todoId}`;
+        } else {
+          if (json.data && json.data.todos) {
+            message += ` - Found ${json.data.todos.length} todos`;
+          } else {
+            message += ' - Response received';
+          }
+        }
+        
+        status.textContent = message;
+        status.className = 'status-msg status-success';
+      } catch (err) {
+        output.textContent = `Error: ${err.message}\n\nURL tried: ${url}\n\nTips:\n• This page should fetch from the same origin through NGINX\n• If you changed the Base URL, make sure it points to an HTTPS endpoint or a reachable proxy\n• For direct API access, use a browser-reachable origin (not a blocked mixed-content HTTP URL from HTTPS)`;
+        status.textContent = `Failed: ${err.message}`;
+        status.className = 'status-msg status-error';
+      }
+    });
+  </script>
+</body>
+</html>

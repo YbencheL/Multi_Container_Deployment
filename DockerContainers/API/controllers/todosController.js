@@ -115,6 +115,12 @@ exports.deleteTodo = async (req, res) => {
                 message: 'id not found'
             })
         }
+        res.status(200).json({
+            status: "success",
+            data: {
+                todo: null
+            }
+        })
         res.status(204);
     } catch (err) {
         const statusCode = err.name === "CastError" ? 400 :

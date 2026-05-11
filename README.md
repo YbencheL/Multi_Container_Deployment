@@ -1,0 +1,161 @@
+# Multi-Container Deployment
+
+Automated deployment for a todo application using Docker, Ansible, and Terraform. The project builds the API, MongoDB, and Nginx images, deploys them with Docker Compose, and uses Ansible to provision and update the target server.
+
+**Target Environment:** Ubuntu VM on Azure  
+**Primary Access:** HTTPS through Nginx  
+**Project Inspiration:** https://roadmap.sh/projects/configuration-management
+
+---
+
+## Quick Start
+
+```bash
+# Install Ansible on the control machine
+sudo apt install ansible
+
+# Run the deployment
+make deploy
+```
+
+---
+
+## Project Structure
+
+```text
+Multi-Container/
+├── docker-compose.yml
+├── Makefile
+├── DockerContainers/
+│   ├── API/
+│   ├── MONGODB/
+│   └── NGINX/
+├── Ansible/
+│   ├── inventory.ini
+│   ├── setup.yml
+│   └── roles/
+└── Terraform/
+	├── main.tf
+	├── variables.tf
+	└── terraform.tfvars
+```
+
+---
+
+## What Each Part Does
+
+- `DockerContainers/API` contains the Node.js todo API.
+- `DockerContainers/MONGODB` builds the MongoDB image used by the stack.
+- `DockerContainers/NGINX` serves the site over HTTPS and proxies traffic.
+- `Ansible` installs Docker, copies the compose setup, and runs deployment.
+- `Terraform` manages the infrastructure layer when you want to provision or destroy Azure resources.
+
+---
+
+## Deployment
+
+The usual local flow is:
+
+```bash
+make build
+```
+
+Or run the pieces manually:
+
+```bash
+docker build -t yass555/todo-api:1.1 DockerContainers/API
+docker build -t yass555/todo-mongodb:1.1 DockerContainers/MONGODB
+docker build -t yass555/todo-nginx:1.1 DockerContainers/NGINX
+
+cd Ansible
+ansible-playbook -i inventory.ini setup.yml --ask-vault-pass
+```
+
+---
+
+## Configuration
+
+- Update `Ansible/inventory.ini` with your server IP and SSH user.
+- Store secrets in Ansible Vault under `group_vars/`.
+- Keep `docker-compose.yml` aligned with the image tags you push.
+- Change the volume paths to you local ones.
+- Update `DockerContainers/NGINX/files/nginx.conf` if the web root or HTTPS behavior changes.
+
+---
+
+## Terraform Tutorial
+
+Use Terraform when you want to provision the Azure infrastructure for this project on your own account.
+
+### 1. Configure Azure Credentials
+
+Set your Azure environment variables before running Terraform:
+
+```bash
+export ARM_SUBSCRIPTION_ID="your-subscription-id"
+export ARM_CLIENT_ID="your-client-id"
+export ARM_CLIENT_SECRET="your-client-secret"
+export ARM_TENANT_ID="your-tenant-id"
+```
+
+Make sure your `Terraform/variables.tf` and `Terraform/terraform.tfvars` values match your VM, network, and access requirements,
+All the configuration of the inferstracute will be done in the main.tf file.
+
+### 2. Format and Initialize
+
+```bash
+cd Terraform
+terraform fmt
+terraform init
+```
+
+`terraform fmt` keeps the files consistent, and `terraform init` downloads the Azure provider and prepares the working directory.
+
+### 3. Validate the Configuration
+
+```bash
+terraform validate
+```
+
+This checks that your Terraform files are syntactically valid before you try to create anything.
+
+### 4. Review the Plan
+
+```bash
+terraform plan -out=tfplan
+```
+
+Read the output carefully so you know exactly what Azure resources will be created, changed, or deleted.
+
+### 5. Apply the Infrastructure
+
+```bash
+terraform apply tfplan
+```
+
+If you did not save a plan file, you can also run `terraform apply` directly, but using a saved plan is safer.
+
+### 6. Useful Terraform Notes
+
+- Keep Terraform focused on infrastructure, not application deployment.
+- All terraform resources syntax and infos will be here :
+```
+    https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
+```
+- Re-run `terraform fmt`, `terraform validate`, and `terraform plan` after every change.
+- Destroy resources with `terraform destroy` when you are done testing.
+
+---
+
+## Troubleshooting
+
+- If Nginx serves old files, rebuild the Nginx image and redeploy the stack.
+- If Ansible fails on vault prompts, verify the vault password and encrypted variables.
+
+---
+
+## Notes
+
+- This repository is meant for learning multi-container deployment workflows.
+- The Terraform layer is separate from the normal application deploy flow.
+- Keep infrastructure provisioning and application rollout as distinct steps.

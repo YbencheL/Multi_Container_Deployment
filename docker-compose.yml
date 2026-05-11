@@ -3,7 +3,7 @@ services:
   api:
     # build:  ./DockerContainers/API
     # image: api:my_api
-    image: yass555/todo-api:1.0
+    image: yass555/todo-api:1.1
     ports:
       - 3000:3000
     container_name: api
@@ -27,7 +27,7 @@ services:
   mongodb:
     # build: ./DockerContainers/MONGODB
     # image: mongodb:my_mongodb
-    image: yass555/todo-mongodb:1.0
+    image: yass555/todo-mongodb:1.1
     ports:
       - 27018:27017
     container_name: mongodb
@@ -36,7 +36,27 @@ services:
     volumes:
       - mongodb:/data/db
     healthcheck:
-      test: ["CMD", "mongosh", "--eval", "'db.adminCommand('ping').ok'"]
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping').ok"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+
+  nginx:
+    # build: ./DockerContainers/NGINX
+    # image: yass555/todo-nginx:1.0
+    image: yass555/todo-nginx:1.1
+    ports:
+      - 443:443
+      - 80:80
+    container_name: nginx
+    networks:
+      nodeJsAPI:
+    volumes:
+      - nginx:/var/www/html/
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost"]
       interval: 30s
       timeout: 5s
       retries: 3
@@ -62,4 +82,11 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: ${MONGO_DATA_PATH:-/home/adminuser/data/mongodb}
+      device: '/home/adminuser/data/mongodb'
+
+  nginx:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/adminuser/data/nginx'

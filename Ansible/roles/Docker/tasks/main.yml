@@ -42,5 +42,7 @@
     project_src: /home/adminuser/multi-container
     state: present
     wait: false
-  environment:
-    MONGO_DATA_PATH: /home/adminuser/data/mongodb
+    build: always
+    recreate: auto
+  # environment:
+  #   MONGO_DATA_PATH: /home/adminuser/data/mongodb

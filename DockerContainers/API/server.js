@@ -5,7 +5,6 @@ const app = require('./app');
 
 const setSecretAsEnv = (envname, path) => {
     const text = fs.readFileSync(path, { encoding: 'utf8', flag: 'r' }).trim();
-    console.log(text);
     process.env[envname] = text;
 }
 

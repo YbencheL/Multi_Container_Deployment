@@ -1,4 +1,6 @@
 DockerContainers/API/secrets
 Ansible/group_vars
-# Terraform
 Terraform/.terraform
+Terraform/variables.tf
+Terraform/variables.tfvars
+.vscode/
