@@ -187,10 +187,12 @@ Once deployed to the remote server, use `make remote-stop` to cleanly shut down 
 
 ## API Testing
 
-*To test all the CRUD operation i recomment using postman with the following urls*:
+**To test all the CRUD operation i recomment using postman with the following urls**:
 
-- For getting all todos or creating a new one elements http://<YOU_SERVERS_IP>:<PORT>/todos .
-- FOR getting a specific element or updating one http://<YOU_SERVERS_IP>:<PORT>/todos/id (you can get an id of a todo by using GET to see all available todos in the Database).
+- For getting all todos or creating a new one elements ```http://<YOU_SERVERS_IP>:<PORT>/todos```.
+- FOR getting a specific element or updating one ```http://<YOU_SERVERS_IP>:<PORT>/todos/id```.
+
+*You can get an id of a todo by using GET to see all available todos in the Database*.
 
 ---
 
