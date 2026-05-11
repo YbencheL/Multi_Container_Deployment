@@ -2,7 +2,6 @@ services:
 
   api:
     # build:  ./DockerContainers/API
-    # image: api:my_api
     image: yass555/todo-api:1.1
     ports:
       - 3000:3000
@@ -26,7 +25,6 @@ services:
   
   mongodb:
     # build: ./DockerContainers/MONGODB
-    # image: mongodb:my_mongodb
     image: yass555/todo-mongodb:1.1
     ports:
       - 27018:27017
@@ -45,7 +43,6 @@ services:
 
   nginx:
     # build: ./DockerContainers/NGINX
-    # image: yass555/todo-nginx:1.0
     image: yass555/todo-nginx:1.1
     ports:
       - 443:443
@@ -69,11 +66,11 @@ networks:
 secrets:
 
   PORT:
-    file: ./DockerContainers/API/secrets/PORT.txt
+    file: ./API/secrets/PORT.txt
   DATABASE:
-    file: ./DockerContainers/API/secrets/DATABASE.txt
+    file: ./API/secrets/DATABASE.txt
   DATABASE_PASSWORD:
-    file: ./DockerContainers/API/secrets/DATABASE_PASSWORD.txt
+    file: ./API/secrets/DATABASE_PASSWORD.txt
 
 volumes:
 
@@ -82,11 +79,12 @@ volumes:
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/adminuser/data/mongodb'
+      # device: '/home/adminuser/data/mongodb'
+      device: ${MONGO_DATA_PATH:-/home/yassine/data/mongodb}
 
   nginx:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: '/home/adminuser/data/nginx'
+      device: ${NGINX_DATA_PATH:-/home/yassine/data/nginx}

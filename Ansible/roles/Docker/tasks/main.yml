@@ -26,10 +26,9 @@
 
 - name: Copying Docker compose file
   ansible.builtin.copy:
-    src: ./../docker-compose.yml
+    src: ./../DockerContainers/docker-compose.yml
     dest: /home/adminuser/multi-container
     force: yes
-
 
 - name: Copying secrets folder
   ansible.builtin.copy:
@@ -44,5 +43,10 @@
     wait: false
     build: always
     recreate: auto
-  # environment:
-  #   MONGO_DATA_PATH: /home/adminuser/data/mongodb
+  environment:
+    MONGO_DATA_PATH: /home/adminuser/data/mongodb
+    NGINX_DATA_PATH: /home/adminuser/data/nginx
+
+- name: Force stop all containers
+  shell: "docker stop $(docker ps -q)"
+  tags: [never, stop]

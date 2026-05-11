@@ -8,6 +8,22 @@ Automated deployment for a todo application using Docker, Ansible, and Terraform
 
 ---
 
+## Table of Contents
+
+1. [Quick Start](#quick-start)
+2. [Project Structure](#project-structure)
+3. [What Each Part Does](#what-each-part-does)
+4. [Deployment](#deployment)
+5. [Configuration](#configuration)
+6. [Terraform Tutorial](#terraform-tutorial)
+7. [Operations](#operations)
+8. [Troubleshooting](#troubleshooting)
+9. [Notes](#notes)
+
+---
+
+---
+
 ## Quick Start
 
 ```bash
@@ -24,12 +40,12 @@ make deploy
 
 ```text
 Multi-Container/
-├── docker-compose.yml
 ├── Makefile
 ├── DockerContainers/
 │   ├── API/
 │   ├── MONGODB/
 │   └── NGINX/
+|   └── docker-compose.yml
 ├── Ansible/
 │   ├── inventory.ini
 │   ├── setup.yml
@@ -140,10 +156,29 @@ If you did not save a plan file, you can also run `terraform apply` directly, bu
 - Keep Terraform focused on infrastructure, not application deployment.
 - All terraform resources syntax and infos will be here :
 ```
-    https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
+https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 ```
 - Re-run `terraform fmt`, `terraform validate`, and `terraform plan` after every change.
 - Destroy resources with `terraform destroy` when you are done testing.
+
+---
+
+## Operations
+
+### Makefile Targets
+
+- `make build` — Build, push, and deploy images.
+- `make up` — Start containers locally (development).
+- `make down` — Stop and remove containers locally.
+- `make start` — Start containers locally without rebuilding.
+- `make stop` — Stop containers locally without removing.
+- `make logs` — View the last 100 lines of container logs.
+- `make deploy` — Deploy to the remote server via Ansible.
+- `make remote-stop` — Stop containers on the remote server via Ansible.
+
+### Managing the Remote Stack
+
+Once deployed to the remote server, use `make remote-stop` to cleanly shut down all containers on the target server from your control machine. This runs the Ansible deployment playbook with the `--tags stop` flag, which stops the Docker Compose stack remotely.
 
 ---
 
