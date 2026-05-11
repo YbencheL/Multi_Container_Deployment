@@ -5,14 +5,14 @@ TAG ?= 1.1
 
 API_IMAGE ?= $(DOCKER_USER)/todo-api:$(TAG)
 MONGO_IMAGE ?= $(DOCKER_USER)/todo-mongodb:$(TAG)
-NGINX_IMAGE ?= nginx:my_nginx
+NGINX_IMAGE ?= $(DOCKER_USER)/todo-nginx:$(TAG)
 
 ANSIBLE_PLAYBOOK ?= Ansible/setup.yml
 ANSIBLE_INVENTORY ?= Ansible/inventory.ini
 
 .PHONY: build build-images push deploy up down logs create-volumes start stop remote-stop
 
-build: deploy
+build: create-volumes build-images push deploy
 
 create-volumes:
 	mkdir -p /home/$(USER)/data/nginx
@@ -34,6 +34,12 @@ deploy:
 
 remote-stop:
 	ansible-playbook -i $(ANSIBLE_INVENTORY) $(ANSIBLE_PLAYBOOK) --ask-vault-pass --tags stop
+
+remote-up:
+	ansible-playbook -i $(ANSIBLE_INVENTORY) $(ANSIBLE_PLAYBOOK) --ask-vault-pass --tags up
+
+remote-down:
+	ansible-playbook -i $(ANSIBLE_INVENTORY) $(ANSIBLE_PLAYBOOK) --ask-vault-pass --tags down
 
 up:
 	docker compose -f ./DockerContainers/docker-compose.yml up -d --build

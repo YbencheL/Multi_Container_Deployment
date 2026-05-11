@@ -176,6 +176,8 @@ https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs
 - `make logs` — View the last 100 lines of container logs.
 - `make deploy` — Deploy to the remote server via Ansible.
 - `make remote-stop` — Stop containers on the remote server via Ansible.
+- `make remote-up` — docker compose up via Ansible.
+- `make remote-down` — docker compose down via Ansible.
 
 ### Managing the Remote Stack
 
@@ -189,10 +191,12 @@ Once deployed to the remote server, use `make remote-stop` to cleanly shut down 
 
 **To test all the CRUD operation i recomment using postman with the following urls**:
 
-- For getting all todos or creating a new one elements ```http://<YOU_SERVERS_IP>:<PORT>/todos```.
-- FOR getting a specific element or updating one ```http://<YOU_SERVERS_IP>:<PORT>/todos/id```.
+- For getting all todos or creating a new one elements ```http://<YOUR_SERVERS_IP>:<PORT>/todos```.
+- FOR getting a specific element or updating one ```http://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>```.
 
 *You can get an id of a todo by using GET to see all available todos in the Database*.
+*Additionally you can access  ```https://<YOUR_SERVERS_IP>:<PORT>/todos``` to see all todos in the database or 
+```https://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>``` to look for a specific ID*
 
 ---
 

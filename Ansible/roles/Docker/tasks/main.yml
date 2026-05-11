@@ -33,7 +33,7 @@
 - name: Generate docker-compose file from template
   ansible.builtin.template:
     src: ./../files/docker-compose.yml.j2
-    dest: /home/adminuser/multi-container
+    dest: /home/adminuser/multi-container/DockerContainers/docker-compose.yml
     force: yes
 
 - name: Copying secrets folder
@@ -44,16 +44,27 @@
 
 - name: Start app with Compose
   community.docker.docker_compose_v2:
-    project_src: /home/adminuser/multi-container
+    project_src: /home/adminuser/multi-container/DockerContainers
     state: present
     wait: false
     build: always
     recreate: auto
+    pull: always
   environment:
     MONGO_DATA_PATH: /home/adminuser/data/mongodb
     NGINX_DATA_PATH: /home/adminuser/data/nginx
 
+- name: Stop compose stack
+  community.docker.docker_compose_v2:
+    project_src: /home/adminuser/multi-container/DockerContainers
+    state: absent
+  tags: [never, down]
 
+- name: Start compose stack
+  community.docker.docker_compose_v2:
+    project_src: /home/adminuser/multi-container/DockerContainers
+    state: present
+  tags: [never, up]
 
 - name: Force stop all containers
   shell: "docker stop $(docker ps -q)"
