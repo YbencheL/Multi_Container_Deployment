@@ -80,11 +80,11 @@ volumes:
       type: 'none'
       o: 'bind'
       # device: '/home/adminuser/data/mongodb'
-      device: ${MONGO_DATA_PATH:-/home/yassine/data/mongodb}
+      device: ${MONGO_DATA_PATH:-/home/adminuser/data/mongodb}
 
   nginx:
     driver: local
     driver_opts:
       type: 'none'
       o: 'bind'
-      device: ${NGINX_DATA_PATH:-/home/yassine/data/nginx}
+      device: ${NGINX_DATA_PATH:-/home/adminuser/data/nginx}
