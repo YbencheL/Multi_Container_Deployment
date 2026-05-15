@@ -3,5 +3,5 @@
   roles:
     - role: Docker
       tags: Docker
-    - role: App
-      tags: App
+    - role: Apps
+      tags: Apps

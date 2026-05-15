@@ -17,11 +17,15 @@ Automated deployment for a todo application using Docker, Ansible, and Terraform
 5. [Configuration](#configuration)
 6. [Terraform Tutorial](#terraform-tutorial)
 7. [Operations](#operations)
-8. [API Testing](#api-testing)
-9. [Troubleshooting](#troubleshooting)
-10. [Notes](#notes)
 
 ---
+
+## API Container
+
+- curl is installed in the API container for quick testing/debugging inside the container.
+
+---
+
 
 ---
 
@@ -90,13 +94,12 @@ ansible-playbook -i inventory.ini setup.yml --ask-vault-pass
 
 ---
 
-## Configuration
 
-- Update `Ansible/inventory.ini` with your server IP and SSH user.
-- Store secrets in Ansible Vault under `group_vars/`.
-- Keep `docker-compose.yml` aligned with the image tags you push.
-- Change the volume paths to you local ones.
-- Update `DockerContainers/NGINX/files/nginx.conf` if the web root or HTTPS behavior changes.
+## Notes
+
+- Secrets are written from vault variables by Ansible, not copied from the repo.
+- NGINX error page and static assets for `/blue` are served with an alias and redirect.
+- Compose expects secrets in `./secrets/` next to the compose file.
 
 ---
 
@@ -195,8 +198,8 @@ Once deployed to the remote server, use `make remote-stop` to cleanly shut down 
 - FOR getting a specific element or updating one ```http://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>```.
 
 *You can get an id of a todo by using GET to see all available todos in the Database, Additionally you can access
-```https://<YOUR_SERVERS_IP>/todos``` to see all todos in the database, Or 
-```https://<YOUR_SERVERS_IP>/todos/<ID>``` to look for a specific ID* since we have proxy redirection in nginx config file.
+```https://<YOUR_SERVERS_IP>:<PORT>/todos``` to see all todos in the database, Or 
+```https://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>``` to look for a specific ID* since we have proxy redirection in nginx config file.
 
 ---
 

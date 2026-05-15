@@ -2,9 +2,6 @@
   ansible.builtin.shell: |
     set -e
     sudo apt update
-    sudo mkdir -p /home/adminuser/data/mongodb
-    sudo mkdir -p /home/adminuser/data/mongodb
-    sudo mkdir -p /home/adminuser/multi-container/DockerContainers
     sudo apt install ca-certificates curl -y
     sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
     sudo install -m 0755 -d /etc/apt/keyrings
@@ -20,6 +17,16 @@
     EOF
     sudo apt update
 
+- name: Rebuilding the volumes
+  ansible.builtin.shell: |
+    sudo rm -rf /home/adminuser/data/mongodb
+    sudo rm -rf /home/adminuser/data/nginx
+    sudo rm -rf /home/adminuser/multi-container/secrets
+    sudo mkdir -p /home/adminuser/data/mongodb
+    sudo mkdir -p /home/adminuser/data/nginx
+    sudo mkdir -p /home/adminuser/multi-container/secrets
+
+
 - name: Docker login
   community.docker.docker_login:
     username: "{{ USERNAME }}"
@@ -34,36 +41,63 @@
 - name: Generate docker-compose file from template
   ansible.builtin.template:
     src: ./../files/docker-compose.yml.j2
-    dest: /home/adminuser/multi-container/DockerContainers/docker-compose.yml
+    dest: /home/adminuser/multi-container/docker-compose.yml
     force: yes
 
-- name: Copying secrets folder
-  ansible.builtin.copy:
-    src: ./../DockerContainers/API/secrets
-    dest: /home/adminuser/multi-container/DockerContainers/API
-    force: yes
+- name: Write secret files for databse
+  copy:
+    dest: /home/adminuser/multi-container/secrets/DATABASE
+    content: "{{ DATABASE }}"
+    owner: 1000
+    group: 1000
+    mode: "0600"
+  no_log: true
+
+- name: Write secret files database password
+  copy:
+    dest: /home/adminuser/multi-container/secrets/DATABASE_PASSWORD
+    content: "{{ DATABASE_PASSWORD }}"
+    owner: 1000
+    group: 1000
+    mode: "0600"
+  no_log: true
+
+- name: Write secret files port
+  copy:
+    dest: /home/adminuser/multi-container/secrets/PORT
+    content: "{{ PORT }}"
+    owner: 1000
+    group: 1000
+    mode: "0600"
+  no_log: true
+
+# - name: Copying secrets folder
+#   ansible.builtin.copy:
+#     src: ./../DockerContainers/API/secrets
+#     dest: /home/adminuser/multi-container/API
+#     force: yes
 
 - name: Start app with Compose
   community.docker.docker_compose_v2:
-    project_src: /home/adminuser/multi-container/DockerContainers
+    project_src: /home/adminuser/multi-container
     state: present
     wait: false
     build: always
     recreate: auto
-    pull: missing
+    pull: always
   environment:
     MONGO_DATA_PATH: /home/adminuser/data/mongodb
     NGINX_DATA_PATH: /home/adminuser/data/nginx
 
 - name: Stop compose stack
   community.docker.docker_compose_v2:
-    project_src: /home/adminuser/multi-container/DockerContainers
+    project_src: /home/adminuser/multi-container
     state: absent
   tags: [never, down]
 
 - name: Start compose stack
   community.docker.docker_compose_v2:
-    project_src: /home/adminuser/multi-container/DockerContainers
+    project_src: /home/adminuser/multi-container
     state: present
   tags: [never, up]
 

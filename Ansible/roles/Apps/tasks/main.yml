@@ -1,5 +1,8 @@
 - name: Copy tarball file
   ansible.builtin.copy:
-    src: ./../files/blue
+    src: "{{ item }}"
     dest: /home/adminuser/data/nginx/
     force: yes
+  loop:
+    - ./../files/blue
+    - ./../files/todo

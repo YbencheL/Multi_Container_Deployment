@@ -12,12 +12,7 @@ ANSIBLE_INVENTORY ?= Ansible/inventory.ini
 
 .PHONY: build build-images push deploy up down logs create-volumes start stop remote-stop
 
-build: create-volumes build-images push deploy
-
-create-volumes:
-	mkdir -p /home/$(USER)/data/nginx
-	mkdir -p /home/$(USER)/data/mongodb
-	mkdir -p /home/$(USER)/data/nodeAPI
+build: build-images push deploy
 
 build-images:
 	docker build -t $(API_IMAGE) DockerContainers/API
@@ -30,7 +25,8 @@ push:
 	docker push $(NGINX_IMAGE)
 
 deploy:
-	ansible-playbook -i $(ANSIBLE_INVENTORY) $(ANSIBLE_PLAYBOOK) --ask-vault-pass
+	ansible-playbook -i $(ANSIBLE_INVENTORY) $(ANSIBLE_PLAYBOOK) \
+	--vault-password-file ./Ansible/group_vars/MultyContainer/my_passwd.txt
 
 remote-stop:
 	ansible-playbook -i $(ANSIBLE_INVENTORY) $(ANSIBLE_PLAYBOOK) --ask-vault-pass --tags stop
