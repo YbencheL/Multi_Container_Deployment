@@ -198,8 +198,8 @@ Once deployed to the remote server, use `make remote-stop` to cleanly shut down 
 - FOR getting a specific element or updating one ```http://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>```.
 
 *You can get an id of a todo by using GET to see all available todos in the Database, Additionally you can access
-```https://<YOUR_SERVERS_IP>:<PORT>/todos``` to see all todos in the database, Or 
-```https://<YOUR_SERVERS_IP>:<PORT>/todos/<ID>``` to look for a specific ID* since we have proxy redirection in nginx config file.
+```https://<YOUR_SERVERS_IP>/todos``` to see all todos in the database, Or 
+```https://<YOUR_SERVERS_IP>/todos/<ID>``` to look for a specific ID* since we have proxy redirection in nginx config file or if you'r trying to use curl there is some helpfull info's in ```https://<YOUR_SERVERS_IP>```.
 
 ---
 
