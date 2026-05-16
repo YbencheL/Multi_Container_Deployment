@@ -199,7 +199,7 @@ Once deployed to the remote server, use `make remote-stop` to cleanly shut down 
 
 *You can get an id of a todo by using GET to see all available todos in the Database, Additionally you can access
 ```https://<YOUR_SERVERS_IP>/todos``` to see all todos in the database, Or 
-```https://<YOUR_SERVERS_IP>/todos/<ID>``` to look for a specific ID* since we have proxy redirection in nginx config file or if you'r trying to use curl there is some helpfull info's in ```https://<YOUR_SERVERS_IP>```.
+```https://<YOUR_SERVERS_IP>/todos/<ID>``` to look for a specific ID* since we have proxy redirection in nginx config file, Or if you're trying to use curl there is some helpfull info's in the index page ```https://<YOUR_SERVERS_IP>```.
 
 ---
 
